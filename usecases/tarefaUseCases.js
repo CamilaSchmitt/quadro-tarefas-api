@@ -1,5 +1,5 @@
 const { pool } = require('../config');
-const Tarefa = require('../entities/Tarefa');
+const Tarefa = require('../entities/tarefa');
 
 const getTarefasDB = async () => {
     try {
@@ -11,7 +11,7 @@ FROM tarefas t
 join quadros q on t.quadro = q.codigo
 order by t.codigo`);
         return rows.map((tarefa) =>
-            new Tarefa(tarefa.codigo, tarefa.titulo, tarefa.descricao, 
+            new Tarefa(tarefa.codigo, tarefa.titulo, tarefa.descricao,
                 tarefa.prioridade, tarefa.data_criacao, tarefa.quadro, tarefa.quadro_nome));
     } catch (err) {
         throw "Erro: " + err;
@@ -20,13 +20,13 @@ order by t.codigo`);
 
 const addTarefaDB = async (body) => {
     try {
-        const {titulo, descricao, prioridade, data_criacao, quadro} = body;
+        const { titulo, descricao, prioridade, data_criacao, quadro } = body;
         const results = await pool.query(`INSERT INTO tarefas (titulo, descricao, 
             prioridade, data_criacao, quadro) VALUES ($1, $2, $3, $4, $5)
         returning codigo, titulo, descricao, prioridade, to_char(data_criacao, 'YYYY-MM-DD') as data_criacao, quadro`,
             [titulo, descricao, prioridade, data_criacao, quadro]);
         const tarefa = results.rows[0];
-        return new Tarefa(tarefa.codigo, tarefa.titulo, tarefa.descricao, 
+        return new Tarefa(tarefa.codigo, tarefa.titulo, tarefa.descricao,
             tarefa.prioridade, tarefa.data_criacao, tarefa.quadro, "");
     } catch (err) {
         throw "Erro ao inserir a tarefa: " + err;
@@ -79,7 +79,7 @@ join quadros q on t.quadro = q.codigo
             throw `Nenhum registro encontrado com o código ${codigo}`;
         } else {
             const tarefa = results.rows[0];
-            return new Tarefa(tarefa.codigo, tarefa.titulo, tarefa.descricao, 
+            return new Tarefa(tarefa.codigo, tarefa.titulo, tarefa.descricao,
                 tarefa.prioridade, tarefa.data_criacao, tarefa.quadro, tarefa.quadro_nome, "");
         }
     } catch (err) {

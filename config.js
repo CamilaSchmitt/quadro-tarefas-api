@@ -6,16 +6,17 @@ let pool = null;
 
 if (isProduction){
     pool = new Pool({
-        connectionString : process.env.DATABASE_URL, ssl : {
+        connectionString : process.env.DATABASE_URL , 
+        ssl : {
             rejectUnauthorized : false
         }
     })
 } else {
     pool = new Pool({
-        user : "postgres",
-        password : "123456",
-        host : "localhost",
-        database : "projeto",
+        user : 'postgres',
+        host : 'localhost',
+        database : 'projeto',
+        password : '123456',
         port : 5432
     })
 }
